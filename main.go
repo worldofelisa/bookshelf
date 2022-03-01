@@ -90,9 +90,6 @@ func parseBookJson(bookInfo []byte) BookInfo {
 		panic(err)
 	}
 	return data
-
-	//num := data["num"].(float64)
-	//fmt.Println(num)
 }
 
 func main() {
