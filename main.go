@@ -125,6 +125,15 @@ func parseAuthInfo(returnedAuthors []byte) Author {
 	return data
 }
 
+func coverPicURL(barcode string) string {
+	//creates a url
+	url := []string{"https://covers.openlibrary.org/b/isbn/", barcode, "-M.jpg"}
+
+	//creates a joined url that can be called upon later
+	//TODO have this send to the front-end for the cover image
+	return strings.Join(url, "")
+}
+
 func main() {
 	barcode := scanImage("./IMG_4779.jpg")
 	bookInfo := getBookInfo(barcode)
@@ -135,12 +144,15 @@ func main() {
 		//adding author information to a slice of new authors
 		returnedAuthors = append(returnedAuthors, parseAuthInfo(getAuthorInfo(author)))
 	}
+
 	authName := []string{}
+
 	for _, name := range returnedAuthors {
 		//takes the response of the returned name and only selects the name from it
 		//output is then placed into an array/slice but is readable as the name
 		authName = append(authName, name.Name)
 
 	}
+	coverPicURL(barcode)
 	fmt.Println(authName, bookData.Title, bookData.ISBN10, bookData.NumberOfPages, bookData.Covers)
 }
