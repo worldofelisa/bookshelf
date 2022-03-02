@@ -27,7 +27,9 @@ type BookInfo struct {
 }
 
 type Author struct {
-	Key string `json:"key"`
+	Key          string `json:"key"`
+	Name         string `json:"name"`
+	PersonalName string `json:"personal_name"`
 }
 
 func fatalErrorHandler(err error) {
@@ -92,9 +94,53 @@ func parseBookJson(bookInfo []byte) BookInfo {
 	return data
 }
 
+func getAuthorInfo(authInfo Author) []byte {
+	//make the url depending on the author code
+	url := []string{"https://openlibrary.org/", authInfo.Key, ".json"}
+
+	//get this url and output it to a response or an error
+	//if error, print error text and exit
+	response, err := http.Get(strings.Join(url, ""))
+	if err != nil {
+		fmt.Print(err.Error())
+		os.Exit(1)
+	}
+
+	//read the response we get from api, if can't read, run fatalError
+	//if can read, return responseData
+	//returns the information in a byte array
+	responseData, err := ioutil.ReadAll(response.Body)
+	fatalErrorHandler(err)
+	return responseData
+}
+
+func parseAuthInfo(returnedAuthors []byte) Author {
+	//declare the variable of data and when it is unmarshalled it goes into this variable
+	var data Author
+
+	//converts the byte array into json
+	if err := json.Unmarshal(returnedAuthors, &data); err != nil {
+		panic(err)
+	}
+	return data
+}
+
 func main() {
 	barcode := scanImage("./IMG_4779.jpg")
 	bookInfo := getBookInfo(barcode)
 	bookData := parseBookJson(bookInfo)
-	fmt.Println(bookData.Authors, bookData.Title, bookData.ISBN10, bookData.NumberOfPages)
+	authInfo := bookData.Authors
+	returnedAuthors := []Author{}
+	for _, author := range authInfo {
+		//adding author information to a slice of new authors
+		returnedAuthors = append(returnedAuthors, parseAuthInfo(getAuthorInfo(author)))
+	}
+	authName := []string{}
+	for _, name := range returnedAuthors {
+		//takes the response of the returned name and only selects the name from it
+		//output is then placed into an array/slice but is readable as the name
+		authName = append(authName, name.Name)
+
+	}
+	fmt.Println(authName, bookData.Title, bookData.ISBN10, bookData.NumberOfPages, bookData.Covers)
 }
