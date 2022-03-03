@@ -44,3 +44,21 @@ func connectToDB() *gorm.DB {
 
 	return gormDB
 }
+
+//migrateDB will create/update the tables but will not delete unused columns
+func migrateDB(conn *gorm.DB) {
+	err := conn.AutoMigrate(
+		&Book{},
+		&Author{},
+		&BookAuthor{},
+		&Genre{},
+		&Tag{},
+		&BookTag{},
+		&Shelf{},
+		&ShelfBook{},
+		&User{},
+		&Review{},
+		&ReadStatus{},
+		&PageTracker{})
+	fatalErrorHandler(err)
+}

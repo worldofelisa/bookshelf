@@ -10,7 +10,7 @@ func main() {
 	bookInfo := getBookInfo(barcode)
 	bookData := parseBookJson(bookInfo)
 	authInfo := bookData.Authors
-	returnedAuthors := []Author{}
+	returnedAuthors := []APIAuthor{}
 	for _, author := range authInfo {
 		//adding author information to a slice of new authors
 		returnedAuthors = append(returnedAuthors, parseAuthInfo(getAuthorInfo(author)))
@@ -25,8 +25,11 @@ func main() {
 
 	}
 	coverPicURL(barcode)
-	fmt.Println(authName, bookData.Title, bookData.ISBN10, bookData.NumberOfPages, bookData.Covers)
+	fmt.Println(authName, bookData.Title, bookData.ISBN10, bookData.NumberOfPages, bookData.Covers, bookData.Series)
 
 	//conn = connectDB
 	conn := connectToDB()
+
+	//migrates the DB tables!
+	migrateDB(conn)
 }
