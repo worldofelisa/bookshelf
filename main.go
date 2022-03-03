@@ -26,4 +26,7 @@ func main() {
 	}
 	coverPicURL(barcode)
 	fmt.Println(authName, bookData.Title, bookData.ISBN10, bookData.NumberOfPages, bookData.Covers)
+
+	//conn = connectDB
+	conn := connectToDB()
 }
