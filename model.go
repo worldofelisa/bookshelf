@@ -11,7 +11,7 @@ type Book struct {
 	Title      string `gorm:"index"`
 	Series     string
 	GenreID    uint
-	PageNumber uint
+	PageNumber int
 }
 
 type Author struct {

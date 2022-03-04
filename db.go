@@ -62,3 +62,9 @@ func migrateDB(conn *gorm.DB) {
 		&PageTracker{})
 	fatalErrorHandler(err)
 }
+
+func rowsAddedResponse(rowsAffected int64) {
+	if rowsAffected == 0 {
+		fmt.Println("Nothing was added.")
+	}
+}

@@ -32,4 +32,7 @@ func main() {
 
 	//migrates the DB tables!
 	migrateDB(conn)
+
+	//add book to DB table
+	addBook(conn)
 }
