@@ -9,6 +9,8 @@ import (
 )
 
 // BookInfo a type which helps to pick out and translate the info returned from the API
+//struct means that this is a type with multiple types within it (ints/strings/arrays/etc.)
+//types can be anything - but if you say the type is an int, only numbers will go into them.
 type BookInfo struct {
 	Publishers    []string    `json:"publishers"`
 	NumberOfPages int         `json:"number_of_pages"`
