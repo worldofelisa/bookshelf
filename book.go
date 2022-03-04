@@ -66,23 +66,26 @@ func coverPicURL(barcode string) string {
 //Creating a book
 //Adds a book using information and inputs the info into the relative tables
 //checks for errors and prints if nothing was added.
-func addBook(conn *gorm.DB) {
+func addBook(conn *gorm.DB, bookData BookInfo, authors []APIAuthor, barcode string, genre string, tags []string) {
 	//takes information and assigns it to variable
 	bookInfo := Book{
-		Title:      "Mexican Gothic",
-		PageNumber: 301,
-		ISBN:       "9781529402681"}
-	bookGenre := Genre{Name: "Gothic Fiction"}
-	bookTags := []Tag{
-		{Name: "Gothic"},
-		{Name: "Fiction"},
-		{Name: "Historical"},
-		{Name: "Horror"},
-		{Name: "Mystery"},
-		{Name: "Fantasy"},
-		{Name: "Thriller"},
-		{Name: "Adult"}}
-	bookAuthors := []Author{{Name: "Silvia Moreno-Garcia", Key: "/authors/OL7481396A"}}
+		Title:      bookData.Title,
+		PageNumber: bookData.NumberOfPages,
+		ISBN:       barcode,
+	}
+	//creates an empty array
+	bookAuthors := []Author{}
+	//for every author within the array authors, add to the empty author array in bookAuthors
+	for _, author := range authors {
+		bookAuthors = append(bookAuthors, Author{Name: author.Name, Key: author.Key})
+	}
+
+	bookGenre := Genre{Name: genre}
+	//see notes above - theory is the same
+	bookTags := []Tag{}
+	for _, tag := range tags {
+		bookTags = append(bookTags, Tag{Name: tag})
+	}
 
 	//adds the variable information to the data using pass by reference
 	//checks to make sure things are added, if nothing prints nothing is added or a error response
