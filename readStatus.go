@@ -2,6 +2,15 @@ package main
 
 import "gorm.io/gorm"
 
+type ReadStatus struct {
+	gorm.Model
+	Status           bool
+	CurrentlyReading bool
+	DNF              bool
+	BookID           uint
+	UserID           uint
+}
+
 //CREATE
 //addReadStatus adds whether the book is currently being read to the DB table.
 //TODO information to come in via code on user end via tick boxes
