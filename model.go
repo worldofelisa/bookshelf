@@ -6,7 +6,7 @@ import (
 
 type Book struct {
 	gorm.Model
-	ISBN       string
+	ISBN       string `gorm:"unique"`
 	Key        string
 	Title      string `gorm:"index"`
 	Series     string

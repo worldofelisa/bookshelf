@@ -68,7 +68,7 @@ func coverPicURL(barcode string) string {
 //Creating a book
 //Adds a book using information and inputs the info into the relative tables
 //checks for errors and prints if nothing was added.
-func addBook(conn *gorm.DB, bookData BookInfo, authors []APIAuthor, barcode string, genre string, tags []string) {
+func storeBookInDB(conn *gorm.DB, bookData BookInfo, authors []APIAuthor, barcode string, genre string) {
 	//takes information and assigns it to variable
 	bookInfo := Book{
 		Title:      bookData.Title,
@@ -83,11 +83,6 @@ func addBook(conn *gorm.DB, bookData BookInfo, authors []APIAuthor, barcode stri
 	}
 
 	bookGenre := Genre{Name: genre}
-	//see notes above - theory is the same
-	bookTags := []Tag{}
-	for _, tag := range tags {
-		bookTags = append(bookTags, Tag{Name: tag})
-	}
 
 	//adds the variable information to the data using pass by reference
 	//checks to make sure things are added, if nothing prints nothing is added or a error response
@@ -111,18 +106,6 @@ func addBook(conn *gorm.DB, bookData BookInfo, authors []APIAuthor, barcode stri
 		bookAuthorResult := conn.Create(&BookAuthor{AuthorID: author.ID, BookID: bookInfo.ID})
 		rowsAddedResponse(bookAuthorResult.RowsAffected)
 		printErrorHandler(bookAuthorResult.Error)
-	}
-
-	for _, bookTag := range bookTags {
-		tagsResult := conn.Create(&bookTag)
-		rowsAddedResponse(tagsResult.RowsAffected)
-		printErrorHandler(tagsResult.Error)
-	}
-
-	for _, bookTag := range bookTags {
-		bookTagResult := conn.Create(&BookTag{BookID: bookInfo.ID, TagID: bookTag.ID})
-		rowsAddedResponse(bookTagResult.RowsAffected)
-		printErrorHandler(bookTagResult.Error)
 	}
 }
 

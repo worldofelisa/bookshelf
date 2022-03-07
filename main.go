@@ -8,7 +8,7 @@ import (
 func main() {
 	barcode := scanImage("./IMG_4779.jpg")
 	bookInfo := getBookInfo(barcode)
-	fmt.Println(string(bookInfo))
+	//fmt.Println(string(bookInfo))
 	bookData := parseBookJson(bookInfo)
 	authInfo := bookData.Authors
 	returnedAuthors := []APIAuthor{}
@@ -27,5 +27,7 @@ func main() {
 	migrateDB(conn)
 
 	//add book to DB table
-	addBook(conn, bookData, returnedAuthors, barcode, "", nil)
+	//storeBookInDB(conn, bookData, returnedAuthors, barcode, "")
+
+	addABook(conn, bookData, returnedAuthors, barcode, nil)
 }
