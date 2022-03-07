@@ -8,7 +8,7 @@ type Book struct {
 	gorm.Model
 	ISBN       string `gorm:"unique"`
 	Key        string
-	Title      string `gorm:"index"`
+	Title      string `gorm:"index;<-:create"`
 	Series     string
 	GenreID    uint
 	PageNumber int
@@ -17,7 +17,7 @@ type Book struct {
 type Author struct {
 	gorm.Model
 	Key  string
-	Name string `gorm:"index"`
+	Name string `gorm:"index;<-:create"`
 }
 
 type BookAuthor struct {
@@ -28,12 +28,12 @@ type BookAuthor struct {
 
 type Genre struct {
 	gorm.Model
-	Name string `gorm:"index"`
+	Name string `gorm:"index;<-:create"`
 }
 
 type Tag struct {
 	gorm.Model
-	Name string `gorm:"index"`
+	Name string `gorm:"index;<-:create"`
 }
 
 type BookTag struct {
@@ -57,7 +57,7 @@ type ShelfBook struct {
 type User struct {
 	gorm.Model
 	Name     string
-	Email    string
+	Email    string `gorm:"unique;index"`
 	Password string
 }
 

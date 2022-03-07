@@ -109,8 +109,39 @@ func storeBookInDB(conn *gorm.DB, bookData BookInfo, authors []APIAuthor, barcod
 	}
 }
 
-//Viewing/Reading a book
+//addABook adds a book if it is not in the Book db table, if it does exist, it returns
+func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, barcode string, tags []string) {
+	book := Book{}
+	bookTableData := seeBook(conn, bookData)
+	if bookTableData != nil {
+		//TODO allow book to be selected by front end?
+		return
+	} else {
+		storeBookInDB(conn, bookData, returnedAuthors, barcode, "")
+	}
 
-//Updating a book
+	//creates an empty array
+	bookTags := []Tag{}
+	//for every tag within the array tags, add to the empty tag array in bookTags
+	for _, tag := range tags {
+		bookTags = append(bookTags, Tag{Name: tag})
+	}
 
-//Deleting a book
+	for _, bookTag := range bookTags {
+		tagsResult := conn.Create(&bookTag)
+		rowsAddedResponse(tagsResult.RowsAffected)
+		printErrorHandler(tagsResult.Error)
+	}
+
+	for _, bookTag := range bookTags {
+		bookTagResult := conn.Create(&BookTag{BookID: book.ID, TagID: bookTag.ID})
+		rowsAddedResponse(bookTagResult.RowsAffected)
+		printErrorHandler(bookTagResult.Error)
+	}
+}
+
+// RETRIEVE BOOK
+func seeBook(conn *gorm.DB, bookData BookInfo) *gorm.DB {
+	book := Book{}
+	return conn.Where(&Book{Title: bookData.Title}).Find(&book)
+}
