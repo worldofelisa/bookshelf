@@ -25,6 +25,17 @@ type BookInfo struct {
 	PublishDate   string      `json:"publishDate"`
 }
 
+type Book struct {
+	gorm.Model
+	ISBN       string `gorm:"unique"`
+	Key        string
+	Title      string   `gorm:"index;<-:create"`
+	Authors    []Author `gorm:"many2many:book_author;"`
+	Series     string
+	GenreID    uint
+	PageNumber int
+}
+
 //gets the book information from the API
 func getBookInfo(barcode string) []byte {
 	//generating the url depending on the barcode
@@ -65,83 +76,36 @@ func coverPicURL(barcode string) string {
 	return strings.Join(url, "")
 }
 
-//Creating a book
-//Adds a book using information and inputs the info into the relative tables
-//checks for errors and prints if nothing was added.
-func storeBookInDB(conn *gorm.DB, bookData BookInfo, authors []APIAuthor, barcode string, genre string) {
-	//takes information and assigns it to variable
-	bookInfo := Book{
-		Title:      bookData.Title,
-		PageNumber: bookData.NumberOfPages,
-		ISBN:       barcode,
-	}
-	//creates an empty array
-	bookAuthors := []Author{}
-	//for every author within the array authors, add to the empty author array in bookAuthors
-	for _, author := range authors {
-		bookAuthors = append(bookAuthors, Author{Name: author.Name, Key: author.Key})
-	}
-
-	bookGenre := Genre{Name: genre}
-
-	//adds the variable information to the data using pass by reference
-	//checks to make sure things are added, if nothing prints nothing is added or a error response
-	bookResult := conn.Create(&bookInfo)
-	rowsAddedResponse(bookResult.RowsAffected)
-	printErrorHandler(bookResult.Error)
-
-	genreResult := conn.Create(&bookGenre)
-	rowsAddedResponse(genreResult.RowsAffected)
-	printErrorHandler(genreResult.Error)
-
-	//loops over the array of authors and adds them to the table using pass by reference
-	//checks to make sure things are added, if not same as above
-	for _, author := range bookAuthors {
-		authorResult := conn.Create(&author)
-		rowsAddedResponse(authorResult.RowsAffected)
-		printErrorHandler(authorResult.Error)
-	}
-
-	for _, author := range bookAuthors {
-		bookAuthorResult := conn.Create(&BookAuthor{AuthorID: author.ID, BookID: bookInfo.ID})
-		rowsAddedResponse(bookAuthorResult.RowsAffected)
-		printErrorHandler(bookAuthorResult.Error)
-	}
-}
-
 //addABook adds a book if it is not in the Book db table, if it does exist, it returns
-func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, barcode string, tags []string) {
+func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, barcode string, genre uint) {
 	book := Book{}
-	bookTableData := seeBook(conn, bookData)
-	if bookTableData != nil {
-		//TODO allow book to be selected by front end?
+	book.Title = bookData.Title
+	bookTableData := book.Retrieve(conn)
+	if bookTableData.RowsAffected != 0 {
 		return
 	} else {
-		storeBookInDB(conn, bookData, returnedAuthors, barcode, "")
-	}
-
-	//creates an empty array
-	bookTags := []Tag{}
-	//for every tag within the array tags, add to the empty tag array in bookTags
-	for _, tag := range tags {
-		bookTags = append(bookTags, Tag{Name: tag})
-	}
-
-	for _, bookTag := range bookTags {
-		tagsResult := conn.Create(&bookTag)
-		rowsAddedResponse(tagsResult.RowsAffected)
-		printErrorHandler(tagsResult.Error)
-	}
-
-	for _, bookTag := range bookTags {
-		bookTagResult := conn.Create(&BookTag{BookID: book.ID, TagID: bookTag.ID})
-		rowsAddedResponse(bookTagResult.RowsAffected)
-		printErrorHandler(bookTagResult.Error)
+		book.ISBN = barcode
+		book.PageNumber = bookData.NumberOfPages
+		book.GenreID = genre
+		//for every author within the array authors, add to the empty author array in bookAuthors
+		for _, author := range returnedAuthors {
+			book.Authors = append(book.Authors, Author{Name: author.Name, Key: author.Key})
+		}
+		book.Create(conn)
 	}
 }
 
-// RETRIEVE BOOK
-func seeBook(conn *gorm.DB, bookData BookInfo) *gorm.DB {
-	book := Book{}
-	return conn.Where(&Book{Title: bookData.Title}).Find(&book)
+// Create a book
+//sends the data through to gorm to create the row within the db table
+func (b *Book) Create(conn *gorm.DB) {
+	//adds the variable information to the data using pass by reference
+	//checks to make sure things are added, if nothing prints nothing is added or a error response
+	bookResult := conn.Create(&b)
+	rowsAddedResponse(bookResult.RowsAffected)
+	printErrorHandler(bookResult.Error)
+}
+
+// Retrieve checks book is in db table and gets it
+func (b *Book) Retrieve(conn *gorm.DB) *gorm.DB {
+	return conn.Where(&b).Find(&b)
 }

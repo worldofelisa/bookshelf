@@ -20,14 +20,11 @@ func main() {
 	coverPicURL(barcode)
 	fmt.Println(bookData.Title, bookData.ISBN10, bookData.NumberOfPages, bookData.Covers, bookData.Series)
 
-	//conn = connectDB
 	conn := connectToDB()
 
 	//migrates the DB tables!
 	migrateDB(conn)
+	seedGenres(conn)
 
-	//add book to DB table
-	//storeBookInDB(conn, bookData, returnedAuthors, barcode, "")
-
-	addABook(conn, bookData, returnedAuthors, barcode, nil)
+	addABook(conn, bookData, returnedAuthors, barcode, 9)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -11,6 +12,13 @@ type APIAuthor struct {
 	Key          string `json:"key"`
 	Name         string `json:"name"`
 	PersonalName string `json:"personal_name"`
+}
+
+type Author struct {
+	gorm.Model
+	Key   string
+	Name  string  `gorm:"index;<-:create"`
+	Books []*Book `gorm:"many2many:book_author;"`
 }
 
 func getAuthorInfo(authInfo APIAuthor) []byte {
