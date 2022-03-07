@@ -36,8 +36,8 @@ func seedGenres(conn *gorm.DB) {
 
 	for _, g := range genres {
 		genre := Genre{Name: g}
-		genreSeed := genre.Retrieve(conn)
-		if genreSeed == nil {
+		genreResult := conn.Where(&genre).Find(&genre)
+		if genreResult.RowsAffected == 0 {
 			conn.Create(&genre)
 		}
 	}
