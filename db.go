@@ -26,6 +26,7 @@ func generateDSN() string {
 		viper.GetString("db.host"),
 		")/",
 		viper.GetString("db.db_name"),
+		"?parseTime=true",
 	}, "")
 }
 
@@ -50,7 +51,6 @@ func migrateDB(conn *gorm.DB) {
 	err := conn.AutoMigrate(
 		&Book{},
 		&Author{},
-		&BookAuthor{},
 		&Genre{},
 		&Tag{},
 		&BookTag{},

@@ -1,10 +1,12 @@
 package main
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Genre struct {
 	gorm.Model
-	Name string `gorm:"index;<-:create"`
+	Name string `gorm:"unique;index;<-:create"`
 }
 
 //seedGenres will fill the table with the genres and create the genre IDs - loop to skip over once created
