@@ -33,20 +33,22 @@ func main() {
 	//user.Password = "123456"
 	//user.Email = "elisa@elisa.com"
 	//user.Create(conn)
-	//userInfo := user.Retrieve(conn)
-	//rowsAddedResponse(userInfo.RowsAffected)
-	//printErrorHandler(userInfo.Error)
+	//user.Retrieve(conn)
 	//fmt.Println(user.Name, user.Password, user.Email)
 	//user.Name = "Princess"
-	//updateUser := user.Update(conn)
-	//rowsAddedResponse(updateUser.RowsAffected)
-	//printErrorHandler(updateUser.Error)
+	//user.Update(conn)
 	////newUserInfo := user.Retrieve(conn)
 	////rowsAddedResponse(newUserInfo.RowsAffected)
 	////printErrorHandler(newUserInfo.Error)
 	////fmt.Println(user.Name, user.Password, user.Email)
-	//userStatus := user.Delete(conn)
-	//rowsAddedResponse(userStatus.RowsAffected)
-	//printErrorHandler(userStatus.Error)
+	//user.Delete(conn)
+
+	pages := PageTracker{}
+	//TODO ask Drew to show/explain how to link the BookID/UserID then update table
+	pages.CurrentPage = 57
+	//pages.Create(conn)
+	//pages.Retrieve(conn)
+	//fmt.Println(pages.CurrentPage)
+	//pages.Update(conn)
 
 }
