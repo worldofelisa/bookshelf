@@ -10,7 +10,11 @@ type PageTracker struct {
 }
 
 // Create adds a page tracker to a book and user
-func (pt *PageTracker) Create(conn *gorm.DB) {
+func (pt *PageTracker) Create(conn *gorm.DB, bookID, userID uint) {
+	bookErr := conn.Model(&pt).Association("BookID").Append(&PageTracker{BookID: bookID})
+	exitErrorHandler(bookErr)
+	userErr := conn.Model(&pt).Association("UserID").Append(&PageTracker{UserID: userID})
+	exitErrorHandler(userErr)
 	ptResult := conn.Create(&pt)
 	rowsAddedResponse(ptResult.RowsAffected)
 	printErrorHandler(ptResult.Error)

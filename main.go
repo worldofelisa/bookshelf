@@ -45,7 +45,8 @@ func main() {
 
 	pages := PageTracker{}
 	//TODO ask Drew to show/explain how to link the BookID/UserID then update table
-	pages.CurrentPage = 57
+	pages.CurrentPage = 75
+	pages.Create(conn, 1, 1)
 	//pages.Create(conn)
 	//pages.Retrieve(conn)
 	//fmt.Println(pages.CurrentPage)
