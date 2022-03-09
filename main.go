@@ -24,7 +24,29 @@ func main() {
 
 	//migrates the DB tables!
 	migrateDB(conn)
-	seedGenres(conn)
+	//seedGenres(conn)
+	//
+	//addABook(conn, bookData, returnedAuthors, barcode, 9)
 
-	addABook(conn, bookData, returnedAuthors, barcode, 9)
+	//user := User{}
+	//user.Name = "Elisa"
+	//user.Password = "123456"
+	//user.Email = "elisa@elisa.com"
+	//user.Create(conn)
+	//userInfo := user.Retrieve(conn)
+	//rowsAddedResponse(userInfo.RowsAffected)
+	//printErrorHandler(userInfo.Error)
+	//fmt.Println(user.Name, user.Password, user.Email)
+	//user.Name = "Princess"
+	//updateUser := user.Update(conn)
+	//rowsAddedResponse(updateUser.RowsAffected)
+	//printErrorHandler(updateUser.Error)
+	////newUserInfo := user.Retrieve(conn)
+	////rowsAddedResponse(newUserInfo.RowsAffected)
+	////printErrorHandler(newUserInfo.Error)
+	////fmt.Println(user.Name, user.Password, user.Email)
+	//userStatus := user.Delete(conn)
+	//rowsAddedResponse(userStatus.RowsAffected)
+	//printErrorHandler(userStatus.Error)
+
 }

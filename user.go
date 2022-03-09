@@ -12,21 +12,24 @@ type User struct {
 }
 
 // Create adds a new user to the database
-func (u *User) Create(conn *gorm.DB, name, password, email string) {
-	userResult := conn.Create(&User{Name: name, Password: password, Email: email})
+func (u *User) Create(conn *gorm.DB) {
+	userResult := conn.Create(&u)
 	rowsAddedResponse(userResult.RowsAffected)
 	printErrorHandler(userResult.Error)
 }
 
 // Retrieve gets information from the db table
-func (u *User) Retrieve(conn *gorm.DB, email string) *gorm.DB {
-	user := User{}
-	return conn.Where(&User{Email: email}).Find(&user)
+func (u *User) Retrieve(conn *gorm.DB) *gorm.DB {
+	return conn.Where(&u).Find(&u)
 }
 
-//UPDATE
-func updateUserInfo() {
-
+// Update retrieves information on the user and then replaces the name / password as needed
+func (u *User) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&u)
 }
 
-//DELETE
+//Delete creates a soft delete - user is still in db table but can not be located with normal queries
+//to query deleted users use Unscoped.
+func (u *User) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&u)
+}
