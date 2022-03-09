@@ -41,15 +41,14 @@ func (t *Tag) Retrieve(conn gorm.DB) *gorm.DB {
 }
 
 // Update the tags on a book
-func (t *Tag) Update(conn gorm.DB, newTags []string) {
-	//search if tag exists, if it does, return loop, else add
-	tag := t.Name
-	for _, newtag := range newTags {
-		if newtag == tag {
-			return
-		} else {
-			newTags = append(newTags, Tag{Name: newtag})
-		}
-		}
-	}
-}
+//func (t *Tag) Update(conn gorm.DB, newTags []string) {
+//	//search if tag exists, if it does, return loop, else add
+//	tag := t.Name
+//	for _, newtag := range newTags {
+//		if newtag == tag {
+//			return
+//		} else {
+//			newTags = append(newTags, Tag{Name: newtag})
+//		}
+//	}
+//}

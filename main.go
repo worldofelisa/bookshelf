@@ -28,12 +28,12 @@ func main() {
 	//
 	//addABook(conn, bookData, returnedAuthors, barcode, 9)
 
-	//user := User{}
+	user := User{}
 	//user.Name = "Elisa"
 	//user.Password = "123456"
-	//user.Email = "elisa@elisa.com"
+	user.Email = "elisa@elisa.com"
 	//user.Create(conn)
-	//user.Retrieve(conn)
+	user.Retrieve(conn)
 	//fmt.Println(user.Name, user.Password, user.Email)
 	//user.Name = "Princess"
 	//user.Update(conn)
@@ -44,10 +44,13 @@ func main() {
 	//user.Delete(conn)
 
 	pages := PageTracker{}
-	//TODO ask Drew to show/explain how to link the BookID/UserID then update table
+	book := Book{}
+	book.Title = "Blood and Chocolate"
+	book.Retrieve(conn)
+	pages.UserID = user.ID
+	pages.BookID = book.ID
 	pages.CurrentPage = 75
-	pages.Create(conn, 1, 1)
-	//pages.Create(conn)
+	pages.Create(conn)
 	//pages.Retrieve(conn)
 	//fmt.Println(pages.CurrentPage)
 	//pages.Update(conn)
