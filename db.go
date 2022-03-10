@@ -26,6 +26,7 @@ func generateDSN() string {
 		viper.GetString("db.host"),
 		")/",
 		viper.GetString("db.db_name"),
+		"?parseTime=true",
 	}, "")
 }
 
@@ -43,4 +44,25 @@ func connectToDB() *gorm.DB {
 	fatalErrorHandler(err)
 
 	return gormDB
+}
+
+//migrateDB will create/update the tables but will not delete unused columns
+func migrateDB(conn *gorm.DB) {
+	err := conn.AutoMigrate(
+		&Book{},
+		&Author{},
+		&Genre{},
+		&Tag{},
+		&BookTag{},
+		&User{},
+		&Review{},
+		&ReadStatus{},
+		&PageTracker{})
+	fatalErrorHandler(err)
+}
+
+func rowsAddedResponse(rowsAffected int64) {
+	if rowsAffected == 0 {
+		fmt.Println("Nothing was added.")
+	}
 }
