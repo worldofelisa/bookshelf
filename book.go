@@ -109,3 +109,11 @@ func (b *Book) Create(conn *gorm.DB) *gorm.DB {
 func (b *Book) Retrieve(conn *gorm.DB) *gorm.DB {
 	return conn.Where(&b).Find(&b)
 }
+
+func (b *Book) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&b)
+}
+
+func (b *Book) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&b)
+}

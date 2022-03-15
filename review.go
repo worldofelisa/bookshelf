@@ -23,3 +23,7 @@ func (r *Review) Retrieve(conn *gorm.DB) *gorm.DB {
 func (r *Review) Update(conn gorm.DB) *gorm.DB {
 	return conn.Save(&r)
 }
+
+func (r *Review) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&r)
+}

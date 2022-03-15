@@ -24,5 +24,8 @@ func (pt *PageTracker) Retrieve(conn *gorm.DB) *gorm.DB {
 // Update saves the information that has changed.
 func (pt *PageTracker) Update(conn *gorm.DB) *gorm.DB {
 	return conn.Save(&pt)
+}
 
+func (pt *PageTracker) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&pt)
 }

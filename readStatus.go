@@ -27,3 +27,7 @@ func (rs *ReadStatus) Retrieve(conn *gorm.DB) *gorm.DB {
 func (rs *ReadStatus) Update(conn *gorm.DB) *gorm.DB {
 	return conn.Save(&rs)
 }
+
+func (rs *ReadStatus) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&rs)
+}
