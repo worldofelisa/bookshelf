@@ -80,7 +80,7 @@ func coverPicURL(barcode string) string {
 func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, barcode string, genre uint) {
 	book := Book{}
 	book.Title = bookData.Title
-	bookTableData := book.Retrieve(conn)
+	bookTableData := Retrieve(conn, &book)
 	if bookTableData.RowsAffected != 0 {
 		return
 	} else {
