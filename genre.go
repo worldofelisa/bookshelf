@@ -45,7 +45,19 @@ func seedGenres(conn *gorm.DB) {
 	}
 }
 
+func (g *Genre) Create(conn *gorm.DB) *gorm.DB {
+	return conn.Create(&g)
+}
+
 //Retrieve to be used to call the genres for the front end
 func (g *Genre) Retrieve(conn *gorm.DB) *gorm.DB {
 	return conn.Where(&g).Find(&g)
+}
+
+func (g *Genre) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&g)
+}
+
+func (g *Genre) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&g)
 }

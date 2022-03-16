@@ -80,7 +80,7 @@ func coverPicURL(barcode string) string {
 func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, barcode string, genre uint) {
 	book := Book{}
 	book.Title = bookData.Title
-	bookTableData := book.Retrieve(conn)
+	bookTableData := Retrieve(conn, &book)
 	if bookTableData.RowsAffected != 0 {
 		return
 	} else {
@@ -108,4 +108,12 @@ func (b *Book) Create(conn *gorm.DB) *gorm.DB {
 // Retrieve checks book is in db table and gets it
 func (b *Book) Retrieve(conn *gorm.DB) *gorm.DB {
 	return conn.Where(&b).Find(&b)
+}
+
+func (b *Book) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&b)
+}
+
+func (b *Book) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&b)
 }

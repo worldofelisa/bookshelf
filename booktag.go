@@ -16,6 +16,10 @@ func (bt *BookTag) Retrieve(conn *gorm.DB) *gorm.DB {
 	return conn.Where(&bt).Find(&bt)
 }
 
+func (bt *BookTag) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&bt)
+}
+
 func (bt *BookTag) Delete(conn *gorm.DB) *gorm.DB {
 	return conn.Delete(&bt)
 }

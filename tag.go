@@ -16,3 +16,11 @@ func (t *Tag) Create(conn *gorm.DB) *gorm.DB {
 func (t *Tag) Retrieve(conn *gorm.DB) *gorm.DB {
 	return conn.Where(&t).Find(&t)
 }
+
+func (t *Tag) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&t)
+}
+
+func (t *Tag) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&t)
+}
