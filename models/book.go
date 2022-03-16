@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"encoding/json"
@@ -37,7 +37,7 @@ type Book struct {
 }
 
 //gets the book information from the API
-func getBookInfo(barcode string) []byte {
+func GetBookInfo(barcode string) []byte {
 	//generating the url depending on the barcode
 	url := []string{"https://openlibrary.org/isbn/", barcode, ".json"}
 
@@ -55,7 +55,7 @@ func getBookInfo(barcode string) []byte {
 }
 
 //helps to make the book information more readable
-func parseBookJson(bookInfo []byte) BookInfo {
+func ParseBookJson(bookInfo []byte) BookInfo {
 	//declare the variable of data and when it is unmarshalled it goes into this variable
 	var data BookInfo
 
@@ -67,7 +67,7 @@ func parseBookJson(bookInfo []byte) BookInfo {
 }
 
 //gets the cover pic from the API and returns it as a working URL
-func coverPicURL(barcode string) string {
+func CoverPicURL(barcode string) string {
 	//creates a url
 	url := []string{"https://covers.openlibrary.org/b/isbn/", barcode, "-M.jpg"}
 

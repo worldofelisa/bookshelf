@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ type Author struct {
 	Books []*Book `gorm:"many2many:book_author;"`
 }
 
-func getAuthorInfo(authInfo APIAuthor) []byte {
+func GetAuthorInfo(authInfo APIAuthor) []byte {
 	//make the url depending on the author code
 	url := []string{"https://openlibrary.org/", authInfo.Key, ".json"}
 
@@ -38,7 +38,7 @@ func getAuthorInfo(authInfo APIAuthor) []byte {
 	return responseData
 }
 
-func parseAuthInfo(returnedAuthors []byte) APIAuthor {
+func ParseAuthInfo(returnedAuthors []byte) APIAuthor {
 	//declare the variable of data and when it is unmarshalled it goes into this variable
 	var data APIAuthor
 

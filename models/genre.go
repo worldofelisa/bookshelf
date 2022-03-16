@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"gorm.io/gorm"
@@ -10,7 +10,7 @@ type Genre struct {
 }
 
 //seedGenres will fill the table with the genres and create the genre IDs - loop to skip over once created
-func seedGenres(conn *gorm.DB) {
+func SeedGenres(conn *gorm.DB) {
 	genres := []string{
 		"Children's",
 		"YA",

@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"database/sql"
@@ -32,7 +32,7 @@ func generateDSN() string {
 
 // connectToDB initializes gorm.DB with my existing DB connection
 //returns the reference to the original variable with connection still open to DB
-func connectToDB() *gorm.DB {
+func ConnectToDB() *gorm.DB {
 	//open up mySQL using the generateDSN (pre-generated)
 	sqlDB, err := sql.Open("mysql", generateDSN())
 	fatalErrorHandler(err)
@@ -47,7 +47,7 @@ func connectToDB() *gorm.DB {
 }
 
 //migrateDB will create/update the tables but will not delete unused columns
-func migrateDB(conn *gorm.DB) {
+func MigrateDB(conn *gorm.DB) {
 	err := conn.AutoMigrate(
 		&Book{},
 		&Author{},

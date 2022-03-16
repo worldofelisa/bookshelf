@@ -3,34 +3,45 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"html/template"
-	"log"
 	"net/http"
+	"tattooedtrees/models"
 )
 
-/*things I have tried:
--alt+enter [surprise, did nothing]
--adding a listen and serve (as it is saying serve http in the error
--adding a function to the homehandler passing arguments
--making a makehandler interface and using that to pass home handler in
-where I have looked:
--github gorilla mux
--go docs (HTTP PACKAGE)
--https://www.calhoun.io/why-cant-i-pass-this-function-as-an-http-handler/
--https://medium.com/geekculture/demystifying-http-handlers-in-golang-a363e4222756
-*/
-
 //Handler registers the route mapping to the URL
-func Handler() {
+func Handler() *mux.Router {
 	r := mux.NewRouter()
-	r.Handle("/", HomeHandler)
+	r.HandleFunc("/", LandingHandler)
+	r.HandleFunc("/login", LoginHandler)
+	r.HandleFunc("/register", RegisterHandler)
+	r.HandleFunc("/home", HomeHandler)
+	return r
+}
+
+func LandingHandler(w http.ResponseWriter, r *http.Request) {
+	DisplayPage(w, "index", BasicPageData{Title: "Tattoo Trees"})
+}
+
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	DisplayPage(w, "login", BasicPageData{Title: "Tattoo Trees"})
+}
+
+func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	DisplayPage(w, "register", BasicPageData{Title: "Tattoo Trees"})
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	DisplayPage(w, "index", BasicPageData{Title: "Tattoo Trees"})
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	DisplayPage(w, "home", HomePageData{
+		BasicPageData: BasicPageData{Title: "Tattoo Trees"}, ShelfTitles: []string{
+			"Read",
+			"Currently Reading",
+			"To Read",
+			"5 Stars",
+			"4+ Stars",
+			"3+ Stars",
+			"DNF",
+		}})
+	book := model.Book{}
 
-	//vars := mux.Vars(r)
-	//w.WriteHeader(http.StatusOK)
 }
 
 var templates = template.Must(template.ParseGlob("templates/*.gohtml"))
