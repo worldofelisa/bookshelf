@@ -3,6 +3,7 @@ module tattooedtrees
 go 1.17
 
 require (
+	github.com/gorilla/mux v1.8.0
 	github.com/sbinet/isbn v0.0.0-20200829171739-42d314c01763
 	github.com/spf13/viper v1.10.1
 	gorm.io/driver/mysql v1.3.2
