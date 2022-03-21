@@ -1,4 +1,4 @@
-package model
+package database
 
 import (
 	"database/sql"
@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 	"strings"
 	"tattooedtrees/customerrors"
+	"tattooedtrees/models"
 )
 
 // generateDSN sets the Data Source Name using the package Viper to retrieve information from the config.yaml file
@@ -50,20 +51,27 @@ func ConnectToDB() *gorm.DB {
 //migrateDB will create/update the tables but will not delete unused columns
 func MigrateDB(conn *gorm.DB) {
 	err := conn.AutoMigrate(
-		&Book{},
-		&Author{},
-		&Genre{},
-		&Tag{},
-		&BookTag{},
-		&User{},
-		&Review{},
-		&ReadStatus{},
-		&PageTracker{})
+		&model.Book{},
+		&model.Author{},
+		&model.Genre{},
+		&model.Tag{},
+		&model.BookTag{},
+		&model.User{},
+		&model.Review{},
+		&model.ReadStatus{},
+		&model.PageTracker{})
 	customerrors.FatalErrorHandler(err)
 }
 
 func rowsAddedResponse(rowsAffected int64) {
 	if rowsAffected == 0 {
 		fmt.Println("Nothing was added.")
+	}
+}
+
+func SeedDB(conn *gorm.DB, dbModel DBModel) {
+	result := conn.Where(&dbModel).Find(&dbModel)
+	if result.RowsAffected == 0 {
+		conn.Create(&dbModel)
 	}
 }

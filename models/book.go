@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 	"tattooedtrees/customerrors"
+	"tattooedtrees/database"
 )
 
 // BookInfo a type which helps to pick out and translate the info returned from the API
@@ -81,7 +82,7 @@ func CoverPicURL(barcode string) string {
 func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, barcode string, genre uint) {
 	book := Book{}
 	book.Title = bookData.Title
-	bookTableData := Retrieve(conn, &book)
+	bookTableData := database.Retrieve(conn, &book)
 	if bookTableData.RowsAffected != 0 {
 		return
 	} else {
