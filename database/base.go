@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 	"strings"
 	"tattooedtrees/customerrors"
-	"tattooedtrees/models"
+	"tattooedtrees/model"
 )
 
 // generateDSN sets the Data Source Name using the package Viper to retrieve information from the config.yaml file
@@ -66,12 +66,5 @@ func MigrateDB(conn *gorm.DB) {
 func rowsAddedResponse(rowsAffected int64) {
 	if rowsAffected == 0 {
 		fmt.Println("Nothing was added.")
-	}
-}
-
-func SeedDB(conn *gorm.DB, dbModel DBModel) {
-	result := conn.Where(&dbModel).Find(&dbModel)
-	if result.RowsAffected == 0 {
-		conn.Create(&dbModel)
 	}
 }

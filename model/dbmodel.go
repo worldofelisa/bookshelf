@@ -1,4 +1,4 @@
-package database
+package model
 
 import "gorm.io/gorm"
 
@@ -23,4 +23,11 @@ func Update(conn *gorm.DB, model DBModel) *gorm.DB {
 
 func Delete(conn *gorm.DB, model DBModel) *gorm.DB {
 	return model.Delete(conn)
+}
+
+func SeedDB(conn *gorm.DB, model DBModel) {
+	result := conn.Where(&model).Find(&model)
+	if result.RowsAffected == 0 {
+		conn.Create(&model)
+	}
 }

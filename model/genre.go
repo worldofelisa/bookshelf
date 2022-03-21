@@ -2,7 +2,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"tattooedtrees/database"
 )
 
 type Genre struct {
@@ -39,7 +38,7 @@ var genres = []string{
 func SeedGenres(conn *gorm.DB) {
 	for _, g := range genres {
 		genre := Genre{Name: g}
-		database.SeedDB(conn, &genre)
+		SeedDB(conn, &genre)
 	}
 }
 

@@ -31,5 +31,4 @@ func (u *User) Update(conn *gorm.DB) *gorm.DB {
 //to query deleted users use Unscoped.
 func (u *User) Delete(conn *gorm.DB) *gorm.DB {
 	return conn.Delete(&u)
-
 }
