@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"tattooedtrees/customerrors"
 )
 
 // BookInfo a type which helps to pick out and translate the info returned from the API
@@ -44,13 +45,13 @@ func GetBookInfo(barcode string) []byte {
 	//get this url and output it to either a response or an error
 	//if it is an error, print an error text and exit
 	response, err := http.Get(strings.Join(url, ""))
-	exitErrorHandler(err)
+	customerrors.ExitErrorHandler(err)
 
 	//read the response that we get from the api, if can't read run fatalError
 	//if can read, return the responseData
 	//returns the information in a byte array
 	responseData, err := ioutil.ReadAll(response.Body)
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 	return responseData
 }
 

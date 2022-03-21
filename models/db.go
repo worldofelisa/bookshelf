@@ -7,6 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"strings"
+	"tattooedtrees/customerrors"
 )
 
 // generateDSN sets the Data Source Name using the package Viper to retrieve information from the config.yaml file
@@ -35,13 +36,13 @@ func generateDSN() string {
 func ConnectToDB() *gorm.DB {
 	//open up mySQL using the generateDSN (pre-generated)
 	sqlDB, err := sql.Open("mysql", generateDSN())
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 
 	//initializes gorm.db, which is an ORM
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{
 		Conn: sqlDB,
 	}), &gorm.Config{})
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 
 	return gormDB
 }
@@ -58,7 +59,7 @@ func MigrateDB(conn *gorm.DB) {
 		&Review{},
 		&ReadStatus{},
 		&PageTracker{})
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 }
 
 func rowsAddedResponse(rowsAffected int64) {

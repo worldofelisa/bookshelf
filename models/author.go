@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"tattooedtrees/customerrors"
 )
 
 type APIAuthor struct {
@@ -28,13 +29,13 @@ func GetAuthorInfo(authInfo APIAuthor) []byte {
 	//get this url and output it to a response or an error
 	//if error, print error text and exit
 	response, err := http.Get(strings.Join(url, ""))
-	exitErrorHandler(err)
+	customerrors.ExitErrorHandler(err)
 
 	//read the response we get from api, if can't read, run fatalError
 	//if can read, return responseData
 	//returns the information in a byte array
 	responseData, err := ioutil.ReadAll(response.Body)
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 	return responseData
 }
 
