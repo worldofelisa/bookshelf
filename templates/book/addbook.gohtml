@@ -9,21 +9,51 @@
     </div>
     <button type="button" id="submit" class="btn btn-primary">Submit</button>
 </form>
+<div class="modal" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Do you want to add this book?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/addbook">
+                    <div class="form group">
+                        <label for="Cover">Cover</label>
+                        <img id="cover" />
+                    </div>
+                    <div class="form group">
+                        <label for="Title">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="form group">
+                        <label for="Author">Author</label>
+                        <input type="text" class="form-control" id="author" name="author">
+                    </div>
+                    <div class="form group">
+                        <label for="Pages">Pages</label>
+                        <input type="number" class="form-control" id="pages" name="pages">
+                    </div>
+                    <div class="form group">
+                        <label for="Genre">Genre</label>
+                        <select id="genre">
+                        </select>
+                    </div>
+                    <div class="form group">
+                        <label for="Tags">Tags (separate by comma for different tags [ex. gothic, vampire])</label>
+                        <input type="text" class="form-control" id="tags" placeholder="Enter tags" name="tags">
+                    </div>
+                    <div class="form group">
+                        <label for="Review">Review</label>
+                        <input type="number" step="0.5" min="0" max="5" class="form-control" id="review" name="review">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" id="complete" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 {{ template "footer" . }}
-{{/*<br><br>*/}}
-{{/*<h1>Manual:</h1>*/}}
-{{/*<form method="post" action="/addbook">*/}}
-{{/*    <div class="form group">*/}}
-{{/*        <label for="InputTitle">Title</label>*/}}
-{{/*        <input type="text" class="form-control" id="InputTitle" placeholder="Enter title" name="title">*/}}
-{{/*    </div>*/}}
-{{/*    <div class="form group">*/}}
-{{/*        <label for="InputAuthor">Password</label>*/}}
-{{/*        <input type="text" class="form-control" id="InputAuthor" placeholder="Enter author(s)" name="author">*/}}
-{{/*    </div>*/}}
-{{/*    <div class="form group">*/}}
-{{/*        <label for="InputPages">Title</label>*/}}
-{{/*        <input type="number" class="form-control" id="InputPages" placeholder="Enter number of pages" name="pages">*/}}
-{{/*    </div>*/}}
-{{/*    <button type="submit" class="btn btn-primary">Submit</button>*/}}
-{{/*</form>*/}}

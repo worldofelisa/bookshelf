@@ -9,7 +9,7 @@ type Genre struct {
 	Name string `gorm:"unique;index;<-:create"`
 }
 
-var genres = []string{
+var Genres = []string{
 	"Children's",
 	"YA",
 	"Classics",
@@ -20,6 +20,7 @@ var genres = []string{
 	"Horror",
 	"Science Fiction",
 	"Fantasy",
+	"Foreign",
 	"Arts and Design",
 	"Comics, Graphic Novels and Manga",
 	"Biography and Entertainment",
@@ -34,9 +35,9 @@ var genres = []string{
 	"Home and Nature",
 }
 
-//seedGenres will fill the table with the genres and create the genre IDs - loop to skip over once created
+//seedGenres will fill the table with the Genres and create the genre IDs - loop to skip over once created
 func SeedGenres(conn *gorm.DB) {
-	for _, g := range genres {
+	for _, g := range Genres {
 		genre := Genre{Name: g}
 		SeedDB(conn, &genre)
 	}
@@ -46,7 +47,7 @@ func (g *Genre) Create(conn *gorm.DB) *gorm.DB {
 	return conn.Create(&g)
 }
 
-//Retrieve to be used to call the genres for the front end
+//Retrieve to be used to call the Genres for the front end
 func (g *Genre) Retrieve(conn *gorm.DB) *gorm.DB {
 	return conn.Where(&g).Find(&g)
 }

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"tattooedtrees/customerrors"
@@ -10,6 +11,20 @@ import (
 
 type FormBook struct {
 	ISBN string `json:"isbn"`
+}
+
+type ConfirmBook struct {
+	BookResponse model.Book
+	Genres       []string
+}
+
+type SubmitBook struct {
+	Title  string
+	Author string
+	Pages  int
+	Genre  string
+	Tags   []string
+	Review int
 }
 
 //BookHandler allows you to display the page from the template which has a form to add a book
@@ -21,14 +36,19 @@ func PostBookHandler(w http.ResponseWriter, r *http.Request) {
 	result, err := ioutil.ReadAll(r.Body)
 	customerrors.PrintErrorHandler(err)
 	var formData FormBook
-	if err = json.Unmarshal(result, &formData); err != nil {
-		customerrors.PrintErrorHandler(err)
-	}
-	barcoding(formData.ISBN)
-
+	err = json.Unmarshal(result, &formData)
+	customerrors.PrintErrorHandler(err)
+	book := barcoding(formData.ISBN)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(ConfirmBook{
+		book,
+		model.Genres,
+	})
+	customerrors.PrintErrorHandler(err)
 }
 
-func barcoding(barcode string) {
+func barcoding(barcode string) model.Book {
 	bookInfo := model.GetBookInfo(barcode)
 	bookData := model.ParseBookJson(bookInfo)
 	authInfo := bookData.Authors
@@ -43,12 +63,21 @@ func barcoding(barcode string) {
 	}
 
 	model.CoverPicURL(barcode)
-	//fmt.Println(bookData.Title, bookData.ISBN10, bookData.NumberOfPages, bookData.Covers, bookData.Series)
 	book := model.Book{Key: bookData.Key, Title: bookData.Title, ISBN: barcode, PageNumber: bookData.NumberOfPages, Authors: authors}
-	model.Create(conn, &book)
+	return book
 }
 
 //create the book page (ensure that it adds mutliple db worth of data, i.e. book info + reviews + tags + genres info)
+func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("I'm here")
+	result, err := ioutil.ReadAll(r.Body)
+	customerrors.PrintErrorHandler(err)
+	fmt.Println(result)
+	var submitData SubmitBook
+	err = json.Unmarshal(result, &submitData)
+	customerrors.PrintErrorHandler(err)
+	fmt.Println(submitData)
+}
 
 //view the book once created
 
