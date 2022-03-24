@@ -35,7 +35,7 @@ func Handler() *mux.Router {
 	r.HandleFunc("/home", HomeHandler)
 	r.HandleFunc("/addbook", BookHandler).Methods(http.MethodGet)
 	r.HandleFunc("/addbook", PostBookHandler).Methods(http.MethodPost)
-	r.HandleFunc("/addbook", PostSubmitBookHandler).Methods(http.MethodPost)
+	r.HandleFunc("/confirmbook", PostSubmitBookHandler).Methods(http.MethodPost)
 	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir("./public/js")))).Methods(http.MethodGet)
 	r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir("./public/css")))).Methods(http.MethodGet)
 	return r

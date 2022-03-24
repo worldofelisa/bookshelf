@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"tattooedtrees/customerrors"
 	"tattooedtrees/model"
 )
@@ -21,10 +22,12 @@ type ConfirmBook struct {
 type SubmitBook struct {
 	Title  string
 	Author string
-	Pages  int
+	Pages  string
 	Genre  string
-	Tags   []string
-	Review int
+	Tags   string
+	Review string
+	ISBN   string
+	Key    string
 }
 
 //BookHandler allows you to display the page from the template which has a form to add a book
@@ -69,13 +72,27 @@ func barcoding(barcode string) model.Book {
 
 //create the book page (ensure that it adds mutliple db worth of data, i.e. book info + reviews + tags + genres info)
 func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("I'm here")
 	result, err := ioutil.ReadAll(r.Body)
 	customerrors.PrintErrorHandler(err)
 	fmt.Println(result)
 	var submitData SubmitBook
 	err = json.Unmarshal(result, &submitData)
 	customerrors.PrintErrorHandler(err)
+	page, err := strconv.Atoi(submitData.Pages)
+	customerrors.PrintErrorHandler(err)
+	genre, err := strconv.ParseUint(submitData.Genre, 10, 64)
+	customerrors.PrintErrorHandler(err)
+	book := model.Book{
+		ISBN:       submitData.ISBN,
+		Key:        submitData.Key,
+		Title:      submitData.Title,
+		Authors:    nil,
+		Series:     "",
+		GenreID:    uint(genre),
+		PageNumber: page,
+	}
+	//TODO add tags into db too
+	//model.Create(conn, &book)
 	fmt.Println(submitData)
 }
 
