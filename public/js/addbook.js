@@ -12,10 +12,25 @@ function submittingForm(e) {
         .then((response) => {
             var myModal = new bootstrap.Modal(document.querySelector("#myModal"), {});
             console.log(response.data)
-            document.getElementById("key").value = response.data["BookResponse"]["Key"];
+            document.getElementById("bookKey").value = response.data["BookResponse"]["Key"];
             document.getElementById("title").value = response.data["BookResponse"]["Title"];
-            document.getElementById("author").value = response.data["BookResponse"]["Authors"][0];
-            //TODO make it loop over multiple authors
+           let authors = response.data["BookResponse"]["Authors"];
+           let authorName = "";
+           let authorKey = "";
+            for (let x = 0; x < authors.length; x++) {
+               if (authorName !== "") {
+                   authorName.concat(",", authors[x]["Name"])
+               } else {
+                   authorName = authors[x]["Name"]
+               }
+               if (authorKey !== "") {
+                   authorKey.concat(",", authors[x]["Key"])
+               } else {
+                   authorKey = authors[x]["Key"]
+               }
+           }
+            document.getElementById("author").value = authorName;
+            document.getElementById("authorsKeys").value = authorKey;
             document.getElementById("pages").value = response.data["BookResponse"]["PageNumber"];
             let genreDOM = document.getElementById("genre");
             for(let i = 0; i < response.data["Genres"].length; i++){
@@ -37,7 +52,7 @@ function closingForm(e) {
     var review = document.getElementById("review");
     var tags = document.getElementById("tags");
     var title = document.getElementById("title");
-    var author = document.getElementById("author");
+    var author = document.getElementById("authorsKeys");
     var pages = document.getElementById("pages");
     var genre = document.getElementById("genre");
     console.log(review, tags, title, author, pages, genre);
@@ -46,11 +61,11 @@ function closingForm(e) {
         review: review.value,
         tags: tags.value,
         title: title.value,
-        author: author.value,
+        authors: author.value,
         pages: pages.value,
         genre: genre.value,
         isbn: document.getElementById("isbn").value,
-        key: document.getElementById("key").value
+        key: document.getElementById("bookKey").value
     })
 }
     //TODO close the modela once the information is sent back with a popup message that says book added.

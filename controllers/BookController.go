@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"tattooedtrees/customerrors"
 	"tattooedtrees/model"
 )
@@ -20,14 +21,14 @@ type ConfirmBook struct {
 }
 
 type SubmitBook struct {
-	Title  string
-	Author string
-	Pages  string
-	Genre  string
-	Tags   string
-	Review string
-	ISBN   string
-	Key    string
+	Title   string `json:"title"`
+	Authors string `json:"authors"`
+	Pages   string `json:"pages"`
+	Genre   string `json:"genre"`
+	Tags    string `json:"tags"`
+	Review  string `json:"review"`
+	ISBN    string `json:"ISBN"`
+	Key     string `json:"key"`
 }
 
 //BookHandler allows you to display the page from the template which has a form to add a book
@@ -82,17 +83,28 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 	customerrors.PrintErrorHandler(err)
 	genre, err := strconv.ParseUint(submitData.Genre, 10, 64)
 	customerrors.PrintErrorHandler(err)
+	authors := strings.Split(submitData.Authors, ",")
+	apiAuthors := []model.Author{}
+	for _, author := range authors {
+		apiAuthor := model.ParseAuthInfo(model.GetAuthorInfo(model.APIAuthor{
+			Key: author,
+		}))
+		apiAuthors = append(apiAuthors, model.Author{
+			Key:  author,
+			Name: apiAuthor.Name,
+		})
+	}
 	book := model.Book{
 		ISBN:       submitData.ISBN,
 		Key:        submitData.Key,
 		Title:      submitData.Title,
-		Authors:    nil,
+		Authors:    apiAuthors,
 		Series:     "",
 		GenreID:    uint(genre),
 		PageNumber: page,
 	}
 	//TODO add tags into db too
-	//model.Create(conn, &book)
+	model.Create(conn, &book)
 	fmt.Println(submitData)
 }
 
