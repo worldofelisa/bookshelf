@@ -89,10 +89,17 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 		apiAuthor := model.ParseAuthInfo(model.GetAuthorInfo(model.APIAuthor{
 			Key: author,
 		}))
-		apiAuthors = append(apiAuthors, model.Author{
-			Key:  author,
-			Name: apiAuthor.Name,
-		})
+		auth := model.Author{}
+		check := model.Retrieve(conn, &auth)
+
+		if check.RowsAffected != 0 {
+			apiAuthors = append(apiAuthors, auth)
+		} else {
+			apiAuthors = append(apiAuthors, model.Author{
+				Key:  author,
+				Name: apiAuthor.Name,
+			})
+		}
 	}
 	book := model.Book{
 		ISBN:       submitData.ISBN,
@@ -103,11 +110,18 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 		GenreID:    uint(genre),
 		PageNumber: page,
 	}
-	//TODO add tags into db too
-	model.Create(conn, &book)
-	fmt.Println(submitData)
+
+	check := model.Retrieve(conn, &book)
+	if check.RowsAffected != 0 {
+		return
+	} else {
+		model.Create(conn, &book)
+		fmt.Println(submitData)
+	}
 }
 
+//TODO add tags into db too
+//TODO add all auths and auth id/key not just the first one
 //view the book once created
 
 //update the book with review and tag

@@ -49,3 +49,22 @@ func ParseAuthInfo(returnedAuthors []byte) APIAuthor {
 	}
 	return data
 }
+
+// Create an author
+//sends the data through to gorm to create the row within the db table
+func (a *Author) Create(conn *gorm.DB) *gorm.DB {
+	return conn.Create(&a)
+}
+
+// Retrieve checks book is in db table and gets it
+func (a *Author) Retrieve(conn *gorm.DB) *gorm.DB {
+	return conn.Where(&a).Find(&a)
+}
+
+func (a *Author) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&a)
+}
+
+func (a *Author) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&a)
+}

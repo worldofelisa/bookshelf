@@ -100,8 +100,6 @@ func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, bar
 // Create a book
 //sends the data through to gorm to create the row within the db table
 func (b *Book) Create(conn *gorm.DB) *gorm.DB {
-	//adds the variable information to the data using pass by reference
-	//checks to make sure things are added, if nothing prints nothing is added or a error response
 	return conn.Create(&b)
 
 }
