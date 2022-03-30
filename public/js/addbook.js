@@ -26,7 +26,7 @@ function submittingForm(e) {
                    authorName = authors[x]["Name"];
                }
                if (authorKey !== "") {
-                   authorKey.concat(",", authors[x]["Key"]);
+                   authorKey = authorKey.concat(",", authors[x]["Key"]);
                } else {
                    authorKey = authors[x]["Key"];
                }
