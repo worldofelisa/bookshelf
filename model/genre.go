@@ -39,7 +39,10 @@ var Genres = []string{
 func SeedGenres(conn *gorm.DB) {
 	for _, g := range Genres {
 		genre := Genre{Name: g}
-		SeedDB(conn, &genre)
+		result := conn.Where(&genre).Find(&genre)
+		if result.RowsAffected == 0 {
+			conn.Create(&genre)
+		}
 	}
 }
 

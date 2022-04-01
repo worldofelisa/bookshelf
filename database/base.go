@@ -55,7 +55,7 @@ func MigrateDB(conn *gorm.DB) {
 		&model.Author{},
 		&model.Genre{},
 		&model.Tag{},
-		&model.BookTag{},
+		&model.UserBookTag{},
 		&model.User{},
 		&model.Review{},
 		&model.ReadStatus{},

@@ -52,8 +52,8 @@ func DisplayPage(w http.ResponseWriter, tmpl string, data interface{}) {
 
 func initialising() {
 	conn = database.ConnectToDB()
-	//database.MigrateDB(conn)
-	//model.SeedGenres(conn)
+	database.MigrateDB(conn)
+	model.SeedGenres(conn)
 	user = model.User{Email: "elisa@elisa.com"}
 	model.Retrieve(conn, &user)
 }

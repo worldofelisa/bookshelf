@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -99,7 +98,6 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 				Name: apiAuthor.Name,
 			})
 		}
-		fmt.Println(apiAuthors)
 	}
 	book := model.Book{
 		ISBN:       submitData.ISBN,
@@ -112,16 +110,29 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	check := model.Retrieve(conn, &book)
-	if check.RowsAffected != 0 {
-		return
-	} else {
+	if check.RowsAffected == 0 {
 		model.Create(conn, &book)
-		fmt.Println(submitData)
+	}
+
+	tags := strings.Split(strings.ReplaceAll(submitData.Tags, " ", ""), ",")
+	for _, tag := range tags {
+		t := model.Tag{Name: tag}
+		check = model.Retrieve(conn, &t)
+
+		if check.RowsAffected == 0 {
+			model.Create(conn, &t)
+		}
+
+		ubt := model.UserBookTag{
+			TagID:  t.ID,
+			BookID: book.ID,
+			UserID: user.ID,
+		}
+		model.Create(conn, &ubt)
 	}
 }
 
 //TODO add tags into db too
-//TODO add all auths and auth id/key not just the first one
 //view the book once created
 
 //update the book with review and tag

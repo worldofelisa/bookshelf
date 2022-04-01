@@ -2,24 +2,25 @@ package model
 
 import "gorm.io/gorm"
 
-type BookTag struct {
+type UserBookTag struct {
 	gorm.Model
 	TagID  uint
 	BookID uint
+	UserID uint
 }
 
-func (bt *BookTag) Create(conn *gorm.DB) *gorm.DB {
-	return conn.Create(&bt)
+func (ubt *UserBookTag) Create(conn *gorm.DB) *gorm.DB {
+	return conn.Create(&ubt)
 }
 
-func (bt *BookTag) Retrieve(conn *gorm.DB) *gorm.DB {
-	return conn.Where(&bt).Find(&bt)
+func (ubt *UserBookTag) Retrieve(conn *gorm.DB) *gorm.DB {
+	return conn.Where(&ubt).Find(&ubt)
 }
 
-func (bt *BookTag) Update(conn *gorm.DB) *gorm.DB {
-	return conn.Save(&bt)
+func (ubt *UserBookTag) Update(conn *gorm.DB) *gorm.DB {
+	return conn.Save(&ubt)
 }
 
-func (bt *BookTag) Delete(conn *gorm.DB) *gorm.DB {
-	return conn.Delete(&bt)
+func (ubt *UserBookTag) Delete(conn *gorm.DB) *gorm.DB {
+	return conn.Delete(&ubt)
 }
