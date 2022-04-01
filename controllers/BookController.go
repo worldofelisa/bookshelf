@@ -75,7 +75,6 @@ func barcoding(barcode string) model.Book {
 func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 	result, err := ioutil.ReadAll(r.Body)
 	customerrors.PrintErrorHandler(err)
-	fmt.Println(result)
 	var submitData SubmitBook
 	err = json.Unmarshal(result, &submitData)
 	customerrors.PrintErrorHandler(err)
@@ -89,7 +88,7 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 		apiAuthor := model.ParseAuthInfo(model.GetAuthorInfo(model.APIAuthor{
 			Key: author,
 		}))
-		auth := model.Author{}
+		auth := model.Author{Name: apiAuthor.Name}
 		check := model.Retrieve(conn, &auth)
 
 		if check.RowsAffected != 0 {
@@ -100,6 +99,7 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 				Name: apiAuthor.Name,
 			})
 		}
+		fmt.Println(apiAuthors)
 	}
 	book := model.Book{
 		ISBN:       submitData.ISBN,
