@@ -132,7 +132,6 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//TODO add tags into db too
 //view the book once created
 
 //update the book with review and tag
