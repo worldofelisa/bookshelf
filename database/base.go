@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"database/sql"
@@ -7,6 +7,8 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"strings"
+	"tattooedtrees/customerrors"
+	"tattooedtrees/model"
 )
 
 // generateDSN sets the Data Source Name using the package Viper to retrieve information from the config.yaml file
@@ -32,33 +34,33 @@ func generateDSN() string {
 
 // connectToDB initializes gorm.DB with my existing DB connection
 //returns the reference to the original variable with connection still open to DB
-func connectToDB() *gorm.DB {
+func ConnectToDB() *gorm.DB {
 	//open up mySQL using the generateDSN (pre-generated)
 	sqlDB, err := sql.Open("mysql", generateDSN())
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 
 	//initializes gorm.db, which is an ORM
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{
 		Conn: sqlDB,
 	}), &gorm.Config{})
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 
 	return gormDB
 }
 
 //migrateDB will create/update the tables but will not delete unused columns
-func migrateDB(conn *gorm.DB) {
+func MigrateDB(conn *gorm.DB) {
 	err := conn.AutoMigrate(
-		&Book{},
-		&Author{},
-		&Genre{},
-		&Tag{},
-		&BookTag{},
-		&User{},
-		&Review{},
-		&ReadStatus{},
-		&PageTracker{})
-	fatalErrorHandler(err)
+		&model.Book{},
+		&model.Author{},
+		&model.Genre{},
+		&model.Tag{},
+		&model.UserBookTag{},
+		&model.User{},
+		&model.Review{},
+		&model.ReadStatus{},
+		&model.PageTracker{})
+	customerrors.FatalErrorHandler(err)
 }
 
 func rowsAddedResponse(rowsAffected int64) {

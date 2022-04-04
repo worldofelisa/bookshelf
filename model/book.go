@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"encoding/json"
@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"tattooedtrees/customerrors"
 )
 
 // BookInfo a type which helps to pick out and translate the info returned from the API
@@ -37,25 +38,25 @@ type Book struct {
 }
 
 //gets the book information from the API
-func getBookInfo(barcode string) []byte {
+func GetBookInfo(barcode string) []byte {
 	//generating the url depending on the barcode
 	url := []string{"https://openlibrary.org/isbn/", barcode, ".json"}
 
 	//get this url and output it to either a response or an error
 	//if it is an error, print an error text and exit
 	response, err := http.Get(strings.Join(url, ""))
-	exitErrorHandler(err)
+	customerrors.ExitErrorHandler(err)
 
 	//read the response that we get from the api, if can't read run fatalError
 	//if can read, return the responseData
 	//returns the information in a byte array
 	responseData, err := ioutil.ReadAll(response.Body)
-	fatalErrorHandler(err)
+	customerrors.FatalErrorHandler(err)
 	return responseData
 }
 
 //helps to make the book information more readable
-func parseBookJson(bookInfo []byte) BookInfo {
+func ParseBookJson(bookInfo []byte) BookInfo {
 	//declare the variable of data and when it is unmarshalled it goes into this variable
 	var data BookInfo
 
@@ -67,7 +68,7 @@ func parseBookJson(bookInfo []byte) BookInfo {
 }
 
 //gets the cover pic from the API and returns it as a working URL
-func coverPicURL(barcode string) string {
+func CoverPicURL(barcode string) string {
 	//creates a url
 	url := []string{"https://covers.openlibrary.org/b/isbn/", barcode, "-M.jpg"}
 
@@ -99,8 +100,6 @@ func addABook(conn *gorm.DB, bookData BookInfo, returnedAuthors []APIAuthor, bar
 // Create a book
 //sends the data through to gorm to create the row within the db table
 func (b *Book) Create(conn *gorm.DB) *gorm.DB {
-	//adds the variable information to the data using pass by reference
-	//checks to make sure things are added, if nothing prints nothing is added or a error response
 	return conn.Create(&b)
 
 }
