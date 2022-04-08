@@ -56,6 +56,9 @@ function closingForm(e) {
     var author = document.getElementById("authorsKeys");
     var pages = document.getElementById("pages");
     var genre = document.getElementById("genre");
+    var read = document.getElementById("read").checked;
+    var currentRead = document.getElementById("currentlyReading").checked;
+    var DNF = document.getElementById("DNF").checked;
     //separate the tags out at the commas into an array.
     axios.post('/confirmbook', {
         review: review.value,
@@ -65,6 +68,9 @@ function closingForm(e) {
         pages: pages.value,
         genre: genre.value,
         isbn: isbn.value,
+        read: read,
+        DNF: DNF,
+        currentReading: currentRead,
         key: document.getElementById("bookKey").value
     })
         .then((response) => {

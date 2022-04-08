@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type ReadStatus struct {
 	gorm.Model
-	Status           bool
+	Read             bool
 	CurrentlyReading bool
 	DNF              bool
 	BookID           uint

@@ -20,14 +20,17 @@ type ConfirmBook struct {
 }
 
 type SubmitBook struct {
-	Title   string `json:"title"`
-	Authors string `json:"authors"`
-	Pages   string `json:"pages"`
-	Genre   string `json:"genre"`
-	Tags    string `json:"tags"`
-	Review  string `json:"review"`
-	ISBN    string `json:"ISBN"`
-	Key     string `json:"key"`
+	Title            string `json:"title"`
+	Authors          string `json:"authors"`
+	Pages            string `json:"pages"`
+	Genre            string `json:"genre"`
+	Tags             string `json:"tags"`
+	Review           string `json:"review"`
+	ISBN             string `json:"ISBN"`
+	Key              string `json:"key"`
+	Read             bool   `json:"read"`
+	CurrentlyReading bool   `json:"currentlyReading"`
+	DNF              bool   `json:"DNF"`
 }
 
 //BookHandler allows you to display the page from the template which has a form to add a book
@@ -130,6 +133,15 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		model.Create(conn, &ubt)
 	}
+
+	readStatus := model.ReadStatus{
+		Read:             submitData.Read,
+		CurrentlyReading: submitData.CurrentlyReading,
+		DNF:              submitData.DNF,
+		BookID:           book.ID,
+		UserID:           user.ID,
+	}
+	model.Create(conn, &readStatus)
 }
 
 //view the book once created
