@@ -142,6 +142,15 @@ func PostSubmitBookHandler(w http.ResponseWriter, r *http.Request) {
 		UserID:           user.ID,
 	}
 	model.Create(conn, &readStatus)
+
+	reviewNumber, err := strconv.ParseFloat(submitData.Review, 64)
+	customerrors.PrintErrorHandler(err)
+	review := model.Review{
+		BookID:    book.ID,
+		UserID:    user.ID,
+		StarValue: reviewNumber,
+	}
+	model.Create(conn, &review)
 }
 
 //view the book once created

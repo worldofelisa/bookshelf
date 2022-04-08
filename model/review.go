@@ -20,7 +20,7 @@ func (r *Review) Retrieve(conn *gorm.DB) *gorm.DB {
 }
 
 // Update review information
-func (r *Review) Update(conn gorm.DB) *gorm.DB {
+func (r *Review) Update(conn *gorm.DB) *gorm.DB {
 	return conn.Save(&r)
 }
 
